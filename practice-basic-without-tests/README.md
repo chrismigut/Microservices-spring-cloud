@@ -4,10 +4,10 @@ Create a mircoservice that pulls configurations from configuation server.
 Configurations are saved to a local git repo.
 
 
-Service        |  Type      | Port
--------------  |  ----      | -------
-limits-service |mircoservice| 8080
-config-server  |configuation| 8888
+Service        |  Type      | Port   | Resource   |
+-------------  |  ----      | -------|-------     |
+limits-service |mircoservice| 8080   | /limits
+config-server  |configuation| 8888   |....
 
 
 ## Order of creation: ##
