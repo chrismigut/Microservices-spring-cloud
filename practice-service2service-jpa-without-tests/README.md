@@ -1,10 +1,12 @@
 
+
 ## Creating two mircoservices to talk to each other. ##
 
 Service             | Type   | Port | Resource
 --------            |------  |------|----------
 Currency-Exchange   |service | 8000 | /currency-exchange/from/{from}/to/{to}
 Currency-Conversion |service | 8100 | /currency-converter/from/{from}/to/{to}/quantity/{quantity}
+Eureka 		    |naming  | 8761 |
 
 #### 1. Create Currency-Exchange Service ####
 * application.properties
@@ -17,7 +19,7 @@ Currency-Conversion |service | 8100 | /currency-converter/from/{from}/to/{to}/qu
 #### 2. Create Currency-Conversion-Service ####
 * application.properties
 * controller
-* bean/dao
+`* bean/dao
 
 #### 3. Create RestTemplate in Currency-Conversion-Service ####
   * RestTemplate maps the return obj from currency-exchange service to obj used by currency-conversion service
@@ -52,3 +54,16 @@ public interface CurrencyExchangeServiceProxy {
 * Enable Ribbon on the Feign proxy, @RibbonClient(...)
 * In currency-conversion-service application.properties, set the following
 currency-exchange-service.ribbon.listOfServers=http://localhost:8000, http://localhost:8001
+
+#### 6. Eureka Naming Server - with Ribbon
+* Euraka allows us to add new servers for a service to be spin up without having to tell/edit other services to be aware of them.
+We no longer have to hard code those servers. A new server would register its self to the naming server. Any service looking to use another service, will ask the naming server if there is an instance of that service and proved the location of that service. 
+* @EnableEurekaServer on application main
+* application.properties: 
+``` java
+spring.application.name=netflix-eureka-naming-server
+server.port=8761
+
+euraka.client.register-with-euraka=false
+euraka.client.fetch-register=false
+```
