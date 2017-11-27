@@ -1,10 +1,8 @@
 
-
-
-
 ## Creating two mircoservices to talk to each other. ##
 Service             | Type   | Port | Resource
 --------            |------  |------|----------
+
 Currency-Exchange   |service | 8000 | /currency-exchange/from/{from}/to/{to}
 Currency-Conversion |service | 8100 | /currency-converter/from/{from}/to/{to}/quantity/{quantity}
 Eureka 		    |naming  | 8761 |
@@ -14,6 +12,7 @@ Eureka 		    |naming  | 8761 |
 * controller
 * bean/dao
 * modifiy pom.xml for jpa and h2 depencies
+
 * data.sql file: insert statements
   * had issues with h2 database, had to create a bean in application for h2 to create tables
 
@@ -21,8 +20,9 @@ Eureka 		    |naming  | 8761 |
 * application.properties
 * controller
 * bean/dao
-
+ 
 #### 3. Create RestTemplate in Currency-Conversion-Service ####
+
 
 * RestTemplate maps the return obj from currency-exchange service to obj used by currency-conversion service
   * this method will be replaced later, right now RestTemplate knows the address of currency-exhange service
@@ -30,7 +30,7 @@ Eureka 		    |naming  | 8761 |
   Map<String, String> uriVariables = new HashMap<>();
 		uriVariables.put("from", from);
 		uriVariables.put("to", to);
-		
+ 		
 		ResponseEntity<CurrencyConversion> reponseEntity = new RestTemplate().getForEntity(
 									"http://localhost:8000/currency-exchange/from/{from}/to/{to}", 
 									CurrencyConversion.class, 
@@ -76,3 +76,13 @@ euraka.client.fetch-register=false
 eureka.client.service-url.default-zone=http://localhost:8761/eureka
 ```
 * Run the currency-conversion service, the service will now be register with Eureka
+
+#### 7. Service_A calling Service_B with the use of Eureka ####
+* At this point the following services are registered with Eureka: currency-conversion, currency-exchange, limits-service
+* We want currency conversion service to call currency-exchange service with Eureka than hard coding the servers of exchange in conversion application.properties
+* Remove the following line from currency-conversion service application.properties
+```java
+currency-exchange-service.ribbon.listOfServers=http://localhost:8000, http://localhost:8001
+```
+* Start up the difference services
+* Currency-conversion service will now be able to locate currency-exchange service
