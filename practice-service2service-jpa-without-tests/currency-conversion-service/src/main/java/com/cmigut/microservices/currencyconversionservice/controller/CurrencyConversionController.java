@@ -13,9 +13,13 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import com.cmigut.microservices.currencyconversionservice.bean.CurrencyConversion;
+import com.cmigut.microservices.currencyconversionservice.proxy.CurrencyExchangeServiceProxy;
 
 @RestController
 public class CurrencyConversionController {
+	
+	@Autowired
+	private CurrencyExchangeServiceProxy proxy;
 	
 	@GetMapping("/currency-converter/from/{from}/to/{to}/quantity/{quantity}")
 	public CurrencyConversion convertCurrency(
@@ -23,18 +27,8 @@ public class CurrencyConversionController {
 			@PathVariable String to,
 			@PathVariable BigDecimal quantity){
 		
-		Map<String, String> uriVariables = new HashMap<>();
-		uriVariables.put("from", from);
-		uriVariables.put("to", to);
-		
-		ResponseEntity<CurrencyConversion> reponseEntity = new RestTemplate().getForEntity(
-									"http://localhost:8000/currency-exchange/from/{from}/to/{to}", 
-									CurrencyConversion.class, 
-									uriVariables);
-		
-		CurrencyConversion response = reponseEntity.getBody();
-		
-		
+		CurrencyConversion response = proxy.retrieveExchangeValue(from, to);
+				
 		return new CurrencyConversion(response.getId(),from,to,
 				response.getConversionMultiple(),
 				quantity,

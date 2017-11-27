@@ -12,6 +12,6 @@ import com.cmigut.microservices.currencyconversionservice.bean.CurrencyConversio
 public interface CurrencyExchangeServiceProxy {
 	
 	@GetMapping("/currency-exchange/from/{from}/to/{to}")
-	public CurrencyConversion retrieveExchangeValue(@PathVariable String from,@PathVariable String to);
+	public CurrencyConversion retrieveExchangeValue(@PathVariable("from") String from,@PathVariable("to") String to);
 
 }
