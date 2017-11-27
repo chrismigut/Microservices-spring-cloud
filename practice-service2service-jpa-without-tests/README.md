@@ -37,7 +37,7 @@ Currency-Conversion |service | 8100 | /currency-converter/from/{from}/to/{to}/qu
 * Add Feign depency in currency-conversion pom.xml
 * EnableFeignClient in application main
 * Create a Feign Proxy interface
-  ```java
+```java
 //name is the service we are going to call
 @FeignClient(name="currency-exchange-service", url="localhost:8000")
 public interface CurrencyExchangeServiceProxy {
