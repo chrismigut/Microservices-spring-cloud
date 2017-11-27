@@ -21,5 +21,16 @@ Currency-Conversion |service | 8100 | /currency-converter/from/{from}/to/{to}/qu
 #### 3. Create RestTemplate in Currency-Conversion-Service ####
   * RestTemplate maps the return obj from currency-exchange service to obj used by currency-conversion service
   * this method will be replaced later, right now RestTemplate knows the address of currency-exhange service
-
+  ```java
+  Map<String, String> uriVariables = new HashMap<>();
+		uriVariables.put("from", from);
+		uriVariables.put("to", to);
+		
+		ResponseEntity<CurrencyConversion> reponseEntity = new RestTemplate().getForEntity(
+									"http://localhost:8000/currency-exchange/from/{from}/to/{to}", 
+									CurrencyConversion.class, 
+									uriVariables);
+		
+		CurrencyConversion response = reponseEntity.getBody();
+ ```
 #### 4. Setup Feign to replace RestTemplate ####
