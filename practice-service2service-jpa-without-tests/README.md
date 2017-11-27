@@ -1,3 +1,4 @@
+
 ## Creating two mircoservices to talk to each other. ##
 
 Service             | Type   | Port | Resource
@@ -45,3 +46,9 @@ public interface CurrencyExchangeServiceProxy {
 	public CurrencyConversion retrieveExchangeValue(@PathVariable("from") String from,@PathVariable("to") String to);
 }
 ```
+
+#### 5. Ribbon - load balancing with help of Feign ####
+* Add Ribbon depency in currency-conversion service pom.xml
+* Enable Ribbon on the Feign proxy, @RibbonClient(...)
+* In currency-conversion-service application.properties, set the following
+currency-exchange-service.ribbon.listOfServers=http://localhost:8000, http://localhost:8001
