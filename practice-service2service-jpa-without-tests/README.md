@@ -34,3 +34,14 @@ Currency-Conversion |service | 8100 | /currency-converter/from/{from}/to/{to}/qu
 		CurrencyConversion response = reponseEntity.getBody();
  ```
 #### 4. Setup Feign to replace RestTemplate ####
+* Add Feign depency in currency-conversion pom.xml
+* EnableFeignClient in application main
+* Create a Feign Proxy interface
+  ```java
+//name is the service we are going to call
+@FeignClient(name="currency-exchange-service", url="localhost:8000")
+public interface CurrencyExchangeServiceProxy {
+	@GetMapping("/currency-exchange/from/{from}/to/{to}")
+	public CurrencyConversion retrieveExchangeValue(@PathVariable String from,@PathVariable String to);
+}
+```
