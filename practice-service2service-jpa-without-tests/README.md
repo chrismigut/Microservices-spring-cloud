@@ -1,7 +1,8 @@
 
 
-## Creating two mircoservices to talk to each other. ##
 
+
+## Creating two mircoservices to talk to each other. ##
 Service             | Type   | Port | Resource
 --------            |------  |------|----------
 Currency-Exchange   |service | 8000 | /currency-exchange/from/{from}/to/{to}
@@ -19,10 +20,11 @@ Eureka 		    |naming  | 8761 |
 #### 2. Create Currency-Conversion-Service ####
 * application.properties
 * controller
-`* bean/dao
+* bean/dao
 
 #### 3. Create RestTemplate in Currency-Conversion-Service ####
-  * RestTemplate maps the return obj from currency-exchange service to obj used by currency-conversion service
+
+* RestTemplate maps the return obj from currency-exchange service to obj used by currency-conversion service
   * this method will be replaced later, right now RestTemplate knows the address of currency-exhange service
   ```java
   Map<String, String> uriVariables = new HashMap<>();
@@ -67,3 +69,10 @@ server.port=8761
 euraka.client.register-with-euraka=false
 euraka.client.fetch-register=false
 ```
+* Add the Eureka depency in currency-conversion pom.xml
+* @EnableDiscoveryClient on application main
+* To register currency-conversion service to eureka, in application.properties add the following
+```java
+eureka.client.service-url.default-zone=http://localhost:8761/eureka
+```
+* Run the currency-conversion service, the service will now be register with Eureka
